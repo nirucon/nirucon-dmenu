@@ -7,8 +7,8 @@
 
 # Function to check if the system has a WiFi card
 has_wifi() {
-    if command -v iw > /dev/null 2>&1; then
-        iw dev | grep -q Interface
+    if command -v nmcli > /dev/null 2>&1; then
+        nmcli device status | grep -q "wifi"
         return $?
     else
         return 1
@@ -25,6 +25,9 @@ Swedish Radio"
 if has_wifi; then
     MENU_OPTIONS="Scan for WiFi\n$MENU_OPTIONS"
 fi
+
+# Add Close menu option
+MENU_OPTIONS="$MENU_OPTIONS\nClose menu"
 
 # Display dmenu and capture the selected option
 CHOICE=$(echo -e "$MENU_OPTIONS" | dmenu -i -p "nirucon dmenu scripts launcher: Select script:")
@@ -46,6 +49,10 @@ case "$CHOICE" in
     "Swedish Radio")
         # Call the srplay-dmenu script
         /usr/local/bin/srplay-dmenu
+        ;;
+    "Close menu")
+        # Exit the launcher script
+        exit 0
         ;;
     *)
         # Handle unexpected choices (if any)
