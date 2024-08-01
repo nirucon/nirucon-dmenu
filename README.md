@@ -1,4 +1,4 @@
-# Nirucon Dmenu Scripts Launcher
+# nirucon dmenu scripts launcher
 
 ## Overview
 
