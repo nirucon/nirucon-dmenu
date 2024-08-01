@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# Script Name: nirucon-dmenu-scripts-launcher
+# Description: A dmenu-based launcher for selected scripts located in /usr/local/bin
+# Author: Nicklas Rudolfsson - https://github.com/nirucon
+# Date: 2024-08-01
+
+# Function to check if the system has a WiFi card
+has_wifi() {
+    if command -v iw > /dev/null 2>&1; then
+        iw dev | grep -q Interface
+        return $?
+    else
+        return 1
+    fi
+}
+
+# Define menu options
+MENU_OPTIONS="\
+Exit system options
+Optimize Arch system
+Swedish Radio"
+
+# Add WiFi option if the system has a WiFi card
+if has_wifi; then
+    MENU_OPTIONS="Scan for WiFi\n$MENU_OPTIONS"
+fi
+
+# Display dmenu and capture the selected option
+CHOICE=$(echo -e "$MENU_OPTIONS" | dmenu -i -p "nirucon dmenu scripts launcher: Select script:")
+
+# Perform action based on user choice
+case "$CHOICE" in
+    "Exit system options")
+        # Call the dwmexit-dmenu script
+        /usr/local/bin/dwmexit-dmenu
+        ;;
+    "Scan for WiFi")
+        # Call the wifi-dmenu script
+        /usr/local/bin/wifi-dmenu
+        ;;
+    "Optimize Arch system")
+        # Call the arch-optimizer-dmenu script
+        /usr/local/bin/arch-optimizer-dmenu
+        ;;
+    "Swedish Radio")
+        # Call the srplay-dmenu script
+        /usr/local/bin/srplay-dmenu
+        ;;
+    *)
+        # Handle unexpected choices (if any)
+        echo "Invalid option selected!"
+        ;;
+esac
+
+# Exit the launcher script
+exit 0
