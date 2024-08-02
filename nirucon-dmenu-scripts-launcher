@@ -10,6 +10,9 @@ has_wifi() {
     if command -v nmcli > /dev/null 2>&1; then
         nmcli device status | grep -q "wifi"
         return $?
+    elif command -v iwconfig > /dev/null 2>&1; then
+        iwconfig 2>&1 | grep -q "ESSID"
+        return $?
     else
         return 1
     fi
@@ -18,7 +21,7 @@ has_wifi() {
 # Define menu options
 MENU_OPTIONS="\
 Exit system options
-Optimize Arch system
+Optimize System
 Swedish Radio"
 
 # Add WiFi option if the system has a WiFi card
@@ -42,9 +45,9 @@ case "$CHOICE" in
         # Call the wifi-dmenu script
         /usr/local/bin/wifi-dmenu
         ;;
-    "Optimize Arch system")
-        # Call the arch-optimizer-dmenu script
-        /usr/local/bin/arch-optimizer-dmenu
+    "Optimize System")
+        # Call the nirucon-system-optimizer script
+        /usr/local/bin/system-optimizer-dmenu
         ;;
     "Swedish Radio")
         # Call the srplay-dmenu script
